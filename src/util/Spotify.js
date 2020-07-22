@@ -1,4 +1,4 @@
-const clientID = ""; // Your Client ID from Spotify
+const clientID = "d9cb14f4ee30456281808c20c1281b9c"; // Your Client ID from Spotify
 const redirectTo = "http:%2F%2Fjammming-with-spotify.surge.sh%2F"; // Change to your website to be redirected to.
 
 let accessToken;
@@ -64,7 +64,19 @@ const Spotify = {
             body: JSON.stringify({ name: playlistName }),
           })
             .then((response) => response.json())
-            .then((jsonResponse) => (playlistId = jsonResponse.id));
+            .then((jsonResponse) => (playlistId = jsonResponse.id))
+            .then(() => {
+              fetch(
+                `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                  },
+                  body: JSON.stringify({ uris: trackURIs }),
+                }
+              );
+            });
         });
     }
   },
